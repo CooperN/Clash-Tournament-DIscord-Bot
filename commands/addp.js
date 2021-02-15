@@ -71,7 +71,7 @@ module.exports = {
               );
             }
             return;
-          } else {
+          } else { //add in guild... not rename if setting off. Rename in guild if applicable
             if(message.author.username != playername && message.member.nickname != playername){
               if(message.member.roles.cache.has('725409051416199240')){
                 message.channel.send('I don\'t have permission to change the nickname of an admin!');

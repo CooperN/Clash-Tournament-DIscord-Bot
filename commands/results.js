@@ -166,11 +166,10 @@ module.exports = {
             googlefunctions.getcredentials(getplayerdata);
   
             message.channel.send(exampleEmbed);
-            //No results channel in the new clan
-            // const resultschannel = client.channels.cache.get("737135505694654525");            
-            // if(message.channel.id != "732695941303500882"){
-            //   resultschannel.send(exampleEmbed);
-            // }
+            const resultschannel = client.channels.cache.get("737135505694654525");            
+            if(message.channel.id != "732695941303500882"){
+              resultschannel.send(exampleEmbed);
+            }
         });
 
         let badresult = updateleaderboard.updateleaderboard();      

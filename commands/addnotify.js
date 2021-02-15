@@ -12,7 +12,7 @@ module.exports = {
       } else{
         member = message.member;
       }
-    
+      //add guild //data.guild.notifyrole
       if(member.roles.cache.has('730485831630061710')) {
         message.channel.send(`${playerData[message.author.id].username} already has the notify role`);
       } else {

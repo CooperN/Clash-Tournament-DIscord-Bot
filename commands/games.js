@@ -24,8 +24,8 @@ module.exports = {
     cooldown: 5,
     admin: false,
     execute(client, message, args, playerData, data){
-
-      if (data.tournamentopen == true) {
+      //this will be guild.data
+      if (data.signupopen == true) {
         return message.reply('Sign ups are currrently open. Tournament matches will be generated when the signups have closed.');
       }
     biggerscopemessage = message;
@@ -34,9 +34,10 @@ module.exports = {
     playedmatches = [];
     playername = "";
     playername = playerData[message.author.id].clashname;
+    //data.guild.tournamentweek
     selectedweek = data.tournamentweek;
 
-
+    // I should funcitonize this. And pull prefix
     if (!playerData[message.author.id].profile) {
         message.channel.send({
           embed: {
@@ -67,6 +68,7 @@ module.exports = {
     const sheets = google.sheets({ version: "v4", auth });
     sheets.spreadsheets.values.get(
       {
+        //edit with data.guild.spreadsheet
         spreadsheetId: "1k-XqY4xWr26uyhSsqhoyvXaQb-GIOczRtXfvJaH8-nM",
         range: "Pool Play!A2:G",
       },

@@ -25,7 +25,8 @@ module.exports = {
     let index = null;
     let name = "";
 
-    if (!data.tournamentopen) return message.reply('sign ups are not currently open');
+    // change to guild
+    if (!data.signupopen) return message.reply('sign ups are not currently open');
 
       if (message.mentions.members.first()) {
         member = message.mentions.members.first();
@@ -50,27 +51,27 @@ module.exports = {
         });
       }
 
-      // if (member.roles.cache.has("774383232824639498")) {
-      //   league += "Top Tier";
-      //   numleague += 1;
-      // }
-      // if (member.roles.cache.has("732627458444230666")) {
-      //   league += "Mid Tier";
-      //   numleague += 1;
-      // }
-      // if (member.roles.cache.has("732627544871796746")) {
-      //   league += "Bottom Tier";
-      //   numleague += 1;
-      // }
-      // if (numleague == 0) {
-      //   return message.channel.send(
-      //     `${playername} is not in a league. <@&725409051416199240> add player to a league \n \n ${playername} please run the !profile command to show your current trophies`
-      //   );
-      // } else if (numleague > 1) {
-      //   return message.channel.send(
-      //     `${playername} is in more than one league. <@&725409051416199240> remove player from one of the leagues`
-      //   );
-      // }
+      if (member.roles.cache.has("774383232824639498")) {
+        league += "Top Tier";
+        numleague += 1;
+      }
+      if (member.roles.cache.has("732627458444230666")) {
+        league += "Mid Tier";
+        numleague += 1;
+      }
+      if (member.roles.cache.has("732627544871796746")) {
+        league += "Bottom Tier";
+        numleague += 1;
+      }
+      if (numleague == 0) {
+        return message.channel.send(
+          `${playername} is not in a league. <@&725409051416199240> add player to a league \n \n ${playername} please run the !profile command to show your current trophies`
+        );
+      } else if (numleague > 1) {
+        return message.channel.send(
+          `${playername} is in more than one league. <@&725409051416199240> remove player from one of the leagues`
+        );
+      }
 
       let playertagurl =
         playerData[member.id].profile;

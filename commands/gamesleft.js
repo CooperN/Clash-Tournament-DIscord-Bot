@@ -23,7 +23,7 @@ var selectedweek = null;
       admin: true,
       execute(client, message, args, playerData, data){
 
-            if (data.tournamentopen == true) {
+            if (data.signupopen == true) {
               return message.reply('Sign ups are currrently open. Tournament matches will be generated when the signups have closed.');
             }
           biggerscopemessage = message;
@@ -50,6 +50,7 @@ var selectedweek = null;
           const sheets = google.sheets({ version: "v4", auth });
           sheets.spreadsheets.values.get(
             {
+              //change with data.guild.spreadsheetid
               spreadsheetId: "1k-XqY4xWr26uyhSsqhoyvXaQb-GIOczRtXfvJaH8-nM",
               range: "Pool Play!A2:G",
             },

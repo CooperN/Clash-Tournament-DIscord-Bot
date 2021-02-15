@@ -7,7 +7,7 @@ module.exports = {
     guildOnly: true,
     admin: true,
     execute(client, message, args, playerData, data){
-            data.tournamentopen = true;
+            data.signupopen = true;
 
             fs.writeFileSync(
                 "Storage/data.json",

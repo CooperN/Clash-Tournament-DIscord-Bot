@@ -68,8 +68,8 @@ client.on("message", async (message) => {
   if (command.guildOnly && message.channel.type === 'dm') {
     return message.reply('I can\'t execute that command inside DMs!');
   }
-  //admin Id from CRS - 725409051416199240
-  if (command.admin && !message.member.roles.cache.has('545120563450871819')) {
+
+  if (command.admin && !message.member.roles.cache.has('725409051416199240')) {
     return message.reply('This command can only be run by an admin');
   }
 

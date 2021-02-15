@@ -1,0 +1,34 @@
+Places to add guild info to write data	
+	closesignup.js
+	addnotify - notifyrole
+    createpoolplay
+        spreadsheet id - pull from datas
+    Daily - for money per guild
+    games
+    gamesleft
+    help
+    join
+    
+Guild Settings
+    Add notify - add command
+    notify - add guild roles/settings to change role 
+        addnotify
+    balance? - guild setting
+        balance per Guild
+    help
+        Add admin role
+
+New
+    GuildSetSpreadsheet
+        Save spreadsheet id to data
+        create tabs in spreadsheet if 
+    GuildSetAdminRole
+        Add adminRole to data 
+    GuildSetNotify
+        Do you want notify?
+        If so what is the role? - save to data
+    Functionize the !addp message. Be sure to pull guild prefix
+    Functionize the "Signups open message" - for consistency 
+    Adminsheet
+        Will show the link to the admin sheet. They will need to add people
+            Maybe save who created it so they know who to ask?

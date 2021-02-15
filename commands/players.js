@@ -11,7 +11,7 @@ module.exports = {
     admin: false,
     execute(client, message, args, playerData, data){
       response = "";
-      if (data.tournamentopen == true) {
+      if (data.signupopen == true) {
          response += 'Sign ups are currrently open.\n\n';
       } else {
         response += 'Sign ups are currrently open.\n\n';

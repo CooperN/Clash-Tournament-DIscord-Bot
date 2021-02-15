@@ -11,12 +11,12 @@ const discord = require("discord.js"); //discord commands
       cooldown: 30,
       admin: false,
       execute(client, message, args, playerData, data){
-
-            if (data.tournamentopen == true) {
+            //change to guild.data
+            if (data.signupopen == true) {
               return message.reply('Sign ups are currrently open. Tournament matches will be generated when the signups have closed.');
             }
 
-
+          // ??? am I going to use this? Looks like I already am....whoops
           let PlayerStats = JSON.parse(fs.readFileSync("Storage/playerStats.json", "utf8"));
 
 

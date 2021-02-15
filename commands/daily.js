@@ -8,6 +8,7 @@ module.exports = {
   guildOnly: true,
   execute(client, message, args, playerData){
     if (
+      //maybe change to guild.lastDaily?
       playerData[message.author.id].lastDaily !=
       moment().format("L")
     ) {
@@ -37,6 +38,7 @@ module.exports = {
     }
   
     fs.writeFileSync(
+      //change here as well
       "Storage/playerData.json",
       JSON.stringify(playerData),
       (err) => {

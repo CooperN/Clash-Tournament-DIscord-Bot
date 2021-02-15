@@ -18,7 +18,8 @@ module.exports = {
         const data = [];
         const { commands } = message.client;
         if (message.channel.type != 'dm') {
-            if (message.member.roles.cache.has('545120563450871819')) {
+            //change to pull from data - need admin role
+            if (message.member.roles.cache.has('725409051416199240')) {
                 admin = true;
             }
         }
@@ -28,13 +29,7 @@ module.exports = {
             data.push(commands.map(command => {
                 if(!command.admin){
                     return (`\t${command.name}  - ${command.shortdescription}\n`);
-                }
-            }).join(''));
-            if (admin) {
-                data.push("Admin Commands:");
-            }
-            data.push(commands.map(command => {
-                if (command.admin && admin) {
+                } else if (command.admin && admin) {
                     return (`\tAdmin: ${command.name}  - ${command.shortdescription}\n`);
                 }
             }).join(''));

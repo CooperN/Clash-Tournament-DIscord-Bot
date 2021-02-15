@@ -27,6 +27,7 @@ function getplayerdata(auth) {
     const sheets = google.sheets({ version: "v4", auth });
     sheets.spreadsheets.values.get(
       {
+        //change to pull from data
         spreadsheetId: "1k-XqY4xWr26uyhSsqhoyvXaQb-GIOczRtXfvJaH8-nM",
         range: "Players!A2:E",
       },
@@ -45,14 +46,14 @@ function getplayerdata(auth) {
 
 
             for(const players of rows){
-              topplayers.push(players); //got rid of leagues for now
-                // if(players[2] == "Top Tier"){
-                //     topplayers.push(players);
-                // } else if(players[2] == "Mid Tier"){
-                //     midplayers.push(players);
-                // } else if(players[2] == "Bottom Tier"){
-                //     bottomplayers.push(players);
-                // }
+                if(players[2] == "Top Tier"){
+                    topplayers.push(players);
+                } else if(players[2] == "Mid Tier"){
+                    midplayers.push(players);
+                } else if(players[2] == "Bottom Tier"){
+                    bottomplayers.push(players);
+                }
+
             }
 
             topmatches = robin(topplayers.length, topplayers);
@@ -106,6 +107,7 @@ function setmatchdata(auth) {
       };
     sheets.spreadsheets.values.append(
       {
+        //change this to pull from data
         spreadsheetId: "1k-XqY4xWr26uyhSsqhoyvXaQb-GIOczRtXfvJaH8-nM",
         range: "Pool Play",
         valueInputOption: "RAW",
@@ -126,6 +128,7 @@ function setmatchdata(auth) {
 
     sheets.spreadsheets.values.clear(
       {
+        // change this to pull from data
         spreadsheetId: "1k-XqY4xWr26uyhSsqhoyvXaQb-GIOczRtXfvJaH8-nM",
         range: "Pool Play",
       },

@@ -1,0 +1,4 @@
+.env
+googlecredentials.json
+googletoken.json
+node_modules

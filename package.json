@@ -1,0 +1,28 @@
+{
+  "name": "clr-league",
+  "version": "1.0.0",
+  "description": "Bot for helping run Clash Royale Tournament",
+  "main": "main.js",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "bot": "node main.js",
+    "dev": "node main.js dev"
+  },
+  "author": "Cooper Norman",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^12.2.0",
+    "dotenv-flow": "^3.2.0",
+    "enmap": "^5.4.0",
+    "googleapis": "^39.2.0",
+    "mathjs": "^7.1.0",
+    "moment": "^2.27.0",
+    "node-fetch": "^2.6.0",
+    "roundrobin": "^1.0.3"
+  },
+  "devDependencies": {
+    "eslint": "^7.4.0",
+    "prettier": "2.0.5"
+  }
+}

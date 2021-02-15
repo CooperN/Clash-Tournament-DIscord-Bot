@@ -1,0 +1,75 @@
+my tag #22GYC2LL
+Role ids
+  Leader - 730524050648203305
+  Admin - 725409051416199240
+  Top Tier - 732626994834964593
+  Mid Tier - 732627458444230666
+  Bottom Tier - 732627544871796746
+  notify - 730485831630061710
+
+  let myRole = message.guild.roles.get("264410914592129025");
+
+
+const config = {
+    token: process.env.token,
+    owner: process.env.owner,
+    prefix: process.env.prefix
+};
+
+
+--------Base command---------
+
+exports.run = (client, message, args) => {
+
+};
+
+exports.help = {
+    name: 'ping'
+};
+
+--------API command---------
+
+const fetch = require("node-fetch"); //used for api calls
+
+const config = {
+    token: process.env.token,
+    owner: process.env.owner,
+    prefix: process.env.prefix
+};
+const key = "Bearer " + config.token;
+
+exports.run = (client, message, args) => {
+
+};
+
+exports.help = {
+    name: 'ping'
+};
+
+
+--------Sheets command---------
+const {google} = require('googleapis');
+const googlefunctions = require("./../googlefunctions");
+
+--inside exports{
+      googlefunctions.readSheet(listMajors);
+  function listMajors(auth) {
+    const sheets = google.sheets({version: 'v4', auth});
+    sheets.spreadsheets.values.get({
+      spreadsheetId: '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms', //1k-XqY4xWr26uyhSsqhoyvXaQb-GIOczRtXfvJaH8-nM this is the ID for the data sheet
+      range: 'Class Data!A2:E',
+    }, (err, res) => {
+      if (err) return console.log('The API returned an error: ' + err);
+      const rows = res.data.values;
+      if (rows.length) {
+        console.log('Name, Major:');
+        // Print columns A and E, which correspond to indices 0 and 4.
+        rows.map((row) => {
+          console.log(`${row[0]}, ${row[4]}`);
+        });
+      } else {
+        console.log('No data found.');
+      }
+    });
+  }
+}

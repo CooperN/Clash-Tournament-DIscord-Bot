@@ -1,0 +1,53 @@
+{
+  "channelID": "737147314644189204",
+  "deleted": false,
+  "id": "738180529614094357",
+  "type": "DEFAULT",
+  "content": "",
+  "authorID": "497629313928003596",
+  "pinned": false,
+  "tts": false,
+  "system": false,
+  "embeds": [
+    {
+      "type": "rich",
+      "description": "Use these arguments for the Leaderboard.",
+      "color": 3381759,
+      "timestamp": null,
+      "fields": [
+        {
+          "value": "`Trophies` − Trophies\n`PersonalBest` **/** `PB` − Personal Best\n`Wins` **/** `W` − Wins\n`Draws` **/** `D` − Draws\n`Losses` **/** `L` − Losses\n`Donations` **/** `Don` − Donations\n`Win%` **/** `%` − Win %\n`Cards` **/** `C` − Cards Won\n`TCW` **/** `3C` − Three Crowns\n`Battles` **/** `B` − Battles\n`WarWins` **/** `WW` − War Day Wins\n`ClanCards` **/** `CC` − Clan Cards Collected\n`ClansJoined` **/** `CL` − Total Clans Joined\n`Hosted` **/** `H` − Tournaments Hosted\n`Tournaments` **/** `TP` − Tournaments Played\n`Friendly` **/** `FB` − Friendly Battles\n`ChallengeWins` **/** `CHW` − Max Wins",
+          "name": "<:TrainingCamp:497809297514692619> Personal Stats",
+          "inline": false
+        },
+        {
+          "value": "<:Level1:497836810890772491>`Lvl1`, <:Level2:497836810748166146>`Lvl2`, <:Level3:497836810861281307>`Lvl3`, <:Level4:497836811176116244>`Lvl4`, <:Level5:497836811255676928>`Lvl5`, <:Level6:497836811767382019>`Lvl6`, <:Level7:497836812711100426>`Lvl7`\n <:Level8:497836811729633290>`Lvl8`, <:Level9:497836811255808024>`Lvl9`, <:Level10:497836810924457987>`Lvl10`, <:Level11:497836810869800965>`Lvl11`, <:Level12:497836811138367519>`Lvl12`, <:Level13:497836811348082718>`Lvl13`",
+          "name": "<:L:497836811163533352> Level arguments",
+          "inline": false
+        },
+        {
+          "value": "`Global` / `G` - Leaderboard out of everyone using this bot.\n`Verified` / `v` - Lists only verified users (**`\\verify`**)\n`Nofilter` / `nf` - Lists all users, no matter if verified or not\n**You can combine some arguments:**\n`\\lb lvl9` - Level 9 Only.\n`\\lb ww v` - War Day Wins, Verified Only.\n`\\lb g ww l13` - Global, War Day Wins, Level13.",
+          "name": "<:S:497790848482672640> Filters",
+          "inline": false
+        }
+      ],
+      "thumbnail": null,
+      "image": null,
+      "video": null,
+      "author": null,
+      "provider": null,
+      "footer": null,
+      "files": []
+    }
+  ],
+  "attachments": [],
+  "createdTimestamp": 1596066352991,
+  "editedTimestamp": null,
+  "webhookID": null,
+  "applicationID": null,
+  "activity": null,
+  "flags": 0,
+  "reference": null,
+  "guildID": "725018490196590674",
+  "cleanContent": ""
+}

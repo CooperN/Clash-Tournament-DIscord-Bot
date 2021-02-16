@@ -37,3 +37,7 @@ Add the following to root:
 - rename a player
 - support multiple servers
 - github documentation
+- players agree to invalidate match results
+  - I'm thinking one player suggest the invalidation !invalidate @otherplayer
+  - Other player then reacts yes or no
+    - if no then @mod to check on it and ask player to give reason - maybe post in issues

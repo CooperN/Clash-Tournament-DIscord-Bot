@@ -12,7 +12,7 @@ const discord = require("discord.js"); //discord commands
       admin: false,
       execute(client, message, args, playerData, data){
             //change to guild.data
-            if (data.signupopen == true) {
+            if (data[message.guild].signupopen == true) {
               return message.reply('Sign ups are currrently open. Tournament matches will be generated when the signups have closed.');
             }
 

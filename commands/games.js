@@ -1,12 +1,6 @@
 const { google } = require("googleapis");
 const googlefunctions = require("./../googlefunctions");
 
-const config = {
-  prefix: process.env.prefix,
-};
-
-const prefix = config.prefix;
-
 var biggerscopemessage = new Object;
 var biggerscopeargs = new Object;
 var opponentbox = null;
@@ -14,6 +8,7 @@ var matches = new Array;
 var playedmatches = new Array;
 var playername = "";
 var selectedweek = null;
+var spreadsheetid = null;
 module.exports = {
     name: 'games',
     description: 'Shows the games needing to be played for the week',
@@ -24,27 +19,25 @@ module.exports = {
     cooldown: 5,
     admin: false,
     execute(client, message, args, playerData, data){
-      //this will be guild.data
-      if (data.signupopen == true) {
+      if (data[message.guild].signupopen == true) {
         return message.reply('Sign ups are currrently open. Tournament matches will be generated when the signups have closed.');
       }
     biggerscopemessage = message;
     biggerscopeargs = args;
+    spreadsheetid = data[message.guild].spreadsheetid;
     matches = [];
     playedmatches = [];
     playername = "";
     playername = playerData[message.author.id].clashname;
-    //data.guild.tournamentweek
-    selectedweek = data.tournamentweek;
+    selectedweek = data[message.guild].tournamentweek;
 
-    // I should funcitonize this. And pull prefix
     if (!playerData[message.author.id].profile) {
         message.channel.send({
           embed: {
             title: "Add Clash Profile",
             //color: 0xF1C40F,
             description:
-              "You have not added your profile tag. To add your profile tag type !addp playertag",
+              `You have not added your profile tag. To add your profile tag type ${data[message.guild].prefix}addp playertag`,
           },
         });
         return;
@@ -55,7 +48,7 @@ module.exports = {
         if (isNaN(selectedweek)) {
           let reply = "";
             reply += ('the week input doesn\'t seem to be a valid number.');
-            reply += `\nTheproper usage would be: \`${prefix}schedule [week number] [-all (for played matches)]\``;
+            reply += `\nTheproper usage would be: \`${data[message.guild].prefix}schedule [week number] [-all (for played matches)]\``;
             return message.reply(reply);
         }
       }
@@ -68,8 +61,7 @@ module.exports = {
     const sheets = google.sheets({ version: "v4", auth });
     sheets.spreadsheets.values.get(
       {
-        //edit with data.guild.spreadsheet
-        spreadsheetId: "1k-XqY4xWr26uyhSsqhoyvXaQb-GIOczRtXfvJaH8-nM",
+        spreadsheetId: spreadsheetid,
         range: "Pool Play!A2:G",
       },
       (err, res) => {

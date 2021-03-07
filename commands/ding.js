@@ -3,7 +3,7 @@ module.exports = {
   description: 'sends dong!',
   shortdescription: 'Sends dong!',
   cooldown: 5,
-  execute(client, message, args, playerData){
+  execute(client, message){
     message.channel.send("dong!").catch(console.error);
   }
 };

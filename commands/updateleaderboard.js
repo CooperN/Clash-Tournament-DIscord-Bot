@@ -10,7 +10,7 @@ const updateleaderboard = require("../updateleaderboard");
     cooldown: 30,
     admin: true,
     execute(client, message){
-        let badresult = updateleaderboard.updateleaderboard();      
+        let badresult = updateleaderboard.updateleaderboard(message.guild);      
 
         if (badresult) 
           return message.channel.send(badresult);

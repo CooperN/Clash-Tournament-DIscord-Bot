@@ -3,6 +3,6 @@ module.exports = {
     description: 'Displays the current tournament week',
     shortdescription: 'Display current week',
     execute(client, message, args, playerData, data){
-                message.channel.send(`Current week is: Week ${data.tournamentweek}`);
+                message.channel.send(`Current week is: Week ${data[message.guild].tournamentweek}`);
     }
   };

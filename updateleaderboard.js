@@ -1,9 +1,10 @@
 const { google } = require("googleapis");
 const googlefunctions = require("./googlefunctions");
 const fs = require("fs"); //file interaction
-
+let guild = null;
 module.exports = {
-    updateleaderboard: function() {
+    updateleaderboard: function(guildid) {
+      guild = guildid;
         googlefunctions.getcredentials(getplayerdata);
     }
 };
@@ -11,11 +12,13 @@ module.exports = {
 function getplayerdata(auth) {
     var PlayerStats = {};
 
-
+    let data = JSON.parse(fs.readFileSync("Storage/data.json", "utf8"));
+    //PlayerStats = JSON.parse(fs.readFileSync("Storage/playerStats.json", "utf8"));
+    //this added them over and over
     const sheets = google.sheets({ version: "v4", auth });
     sheets.spreadsheets.values.get(
       {
-        spreadsheetId: "1k-XqY4xWr26uyhSsqhoyvXaQb-GIOczRtXfvJaH8-nM",
+        spreadsheetId: data[guild].spreadsheetid,
         range: "Pool Play!A2:K",
       },
       (err, res) => {

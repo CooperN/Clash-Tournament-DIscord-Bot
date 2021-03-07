@@ -5,7 +5,7 @@ module.exports = {
   usage: '<any text to say>',
   description: 'says the text after',
   shortdescription: 'Bot says your message',
-  execute(client, message, args, playerData){
+  execute(client, message, args){
     const response = args.join(" ");
     message.delete();
     message.channel.send(response);  }

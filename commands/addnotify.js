@@ -3,20 +3,25 @@ module.exports = {
   description: 'adds the notify role to a player',
   guildOnly: true,
   shortdescription: 'gives the notify role',
-  execute(client, message, args, playerData){
+  execute(client, message, args, playerData, data){
 
       let member = "";
     
+      if(!data[message.guild].notifyrole){
+        message.channel.send(`There is no role set for nofications. <@&${data[message.guild].adminrole}> run the command !setnotifyrole to add a notificaiton role`);
+        return;
+      }
+
       if(message.mentions.members.first()){
         member = message.mentions.members.first();
       } else{
         member = message.member;
       }
-      //add guild //data.guild.notifyrole
-      if(member.roles.cache.has('730485831630061710')) {
+
+      if(member.roles.cache.has(data[message.guild].notifyrole)) {
         message.channel.send(`${playerData[message.author.id].username} already has the notify role`);
       } else {
-        member.roles.add('730485831630061710').catch(console.error);
+        member.roles.add(data[message.guild].notifyrole).catch(console.error);
         message.channel.send(`Added notify role to ${playerData[message.author.id].username}`);
       }
  }

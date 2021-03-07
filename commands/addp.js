@@ -14,7 +14,7 @@ module.exports = {
   usage: '<clash royale playertag>',
   description: 'add a players clash profile to the bot',
   shortdescription: 'Save Clash Tag',
-  execute(client, message, args, playerData){
+  execute(client, message, args, playerData, data){
     const tag = args.shift();
     if (tag === "playertag") {
       message.channel.send({
@@ -72,17 +72,19 @@ module.exports = {
             }
             return;
           } else { //add in guild... not rename if setting off. Rename in guild if applicable
-            if(message.author.username != playername && message.member.nickname != playername){
-              if(message.member.roles.cache.has('725409051416199240')){
-                message.channel.send('I don\'t have permission to change the nickname of an admin!');
-              } else {
-                  if (!message.guild.me.hasPermission('MANAGE_NICKNAMES')) {
-                    message.channel.send('I don\'t have permission to change your nickname!');
-                  } else {
-                    //if admin console.log(can't rename)
-                    message.member.setNickname(playername);
-                    reply = (`\n\nAlso, ${message.author} your Discord name ${name} is different than your clash name ${playername}. I've fixed it for you. Say thank you.`);
-                  }
+            if(data[message.guild].rename) {
+              if(message.author.username != playername && message.member.nickname != playername){
+                if(message.member.roles.cache.has('725409051416199240')){
+                  message.channel.send('I don\'t have permission to change the nickname of an admin!');
+                } else {
+                    if (!message.guild.me.hasPermission('MANAGE_NICKNAMES')) {
+                      message.channel.send('I don\'t have permission to change your nickname!');
+                    } else {
+                      //if admin console.log(can't rename)
+                      message.member.setNickname(playername);
+                      reply = (`\n\nAlso, ${message.author} your Discord name ${name} is different than your clash name ${playername}. I've fixed it for you. Say thank you.`);
+                    }
+                }
               }
             }
 

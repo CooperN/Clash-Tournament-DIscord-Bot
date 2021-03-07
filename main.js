@@ -3,19 +3,12 @@
 const discord = require("discord.js"); //discord commands
 const fs = require("fs"); //file interaction
 const createplayer = require("./initialplayerdata");
+const createguild = require("./initialguilddata");
 const client = new discord.Client();
 const cooldowns = new discord.Collection();
 
 require("dotenv-flow").config();
 
-const config = {
-  token: process.env.token,
-  owner: process.env.owner,
-  prefix: process.env.prefix,
-  discordtoken: process.env.discordtoken,
-};
-
-const prefix = config.prefix;
 
 client.commands = new discord.Collection();
 
@@ -37,10 +30,15 @@ let data = JSON.parse(fs.readFileSync("Storage/data.json", "utf8"));
 
 client.on("message", async (message) => {
 
-  const args = message.content.slice(prefix.length).trim().split(/ +/);
-  const commandName = args.shift().toLowerCase();
+  if (!data[message.guild]) {
+    createguild.execute(client, message, args, data);
+    data = JSON.parse(fs.readFileSync("Storage/data.json", "utf8"));
+  }
+  
+  if (!message.content.startsWith(data[message.guild].prefix) || message.author.bot) return;
 
-  if (!message.content.startsWith(prefix) || message.author.bot) return;
+  const args = message.content.slice(data[message.guild].prefix.length).trim().split(/ +/);
+  const commandName = args.shift().toLowerCase();
 
   playerData = JSON.parse(fs.readFileSync("Storage/playerData.json", "utf8"));
   data = JSON.parse(fs.readFileSync("Storage/data.json", "utf8"));
@@ -59,7 +57,7 @@ client.on("message", async (message) => {
     let reply = (`You didn't provide any arguments, ${message.author}!`);
 
     if (command.usage) {
-      reply += `\nTheproper usage would be: \`${prefix}${command.name} ${command.usage}\``;
+      reply += `\nTheproper usage would be: \`${data[message.guild].prefix}${command.name} ${command.usage}\``;
     }
 
     return message.channel.send(reply);
@@ -69,7 +67,7 @@ client.on("message", async (message) => {
     return message.reply('I can\'t execute that command inside DMs!');
   }
 
-  if (command.admin && !message.member.roles.cache.has('725409051416199240')) {
+  if (command.admin && !message.member.roles.cache.has(data[message.guild].adminrole)) {
     return message.reply('This command can only be run by an admin');
   }
 
@@ -105,4 +103,4 @@ client.on("ready", () => {
   console.log("Bot loaded");
 });
 
-client.login(config.discordtoken);
+client.login(process.env.discordtoken);

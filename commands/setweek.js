@@ -11,7 +11,7 @@ module.exports = {
     execute(client, message, args, playerData, data){
             var currentweek = parseInt(args.shift());
             if(Number.isInteger(1)){
-                data.tournamentweek = currentweek;
+              data[message.guild].tournamentweek = currentweek;
 
                 fs.writeFileSync(
                     "Storage/data.json",

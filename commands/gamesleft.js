@@ -1,17 +1,12 @@
 const { google } = require("googleapis");
 const googlefunctions = require("../googlefunctions");
 
-const config = {
-    prefix: process.env.prefix,
-  };
-  
-  const prefix = config.prefix;
-
 var biggerscopemessage = new Object;
 var biggerscopeargs = new Object;
 var matches = new Array;
 var playedmatches = new Array;
 var selectedweek = null;
+var spreadsheetId
   module.exports = {
       name: 'gamesleft',
       description: 'Shows all remaining games for the selected week',
@@ -23,21 +18,22 @@ var selectedweek = null;
       admin: true,
       execute(client, message, args, playerData, data){
 
-            if (data.signupopen == true) {
+            if (data[message.guild].signupopen == true) {
               return message.reply('Sign ups are currrently open. Tournament matches will be generated when the signups have closed.');
             }
           biggerscopemessage = message;
           biggerscopeargs = args;
+          spreadsheetId = data[message.guild].spreadsheetid;
           matches = [];
           playedmatches = [];
-          selectedweek = data.tournamentweek;
+          selectedweek = data[message.guild].tournamentweek;
           let reply = "";
 
           if(args[0] != '-all' && args[0]){
             selectedweek = parseInt(args[0]);
             if (isNaN(selectedweek)) {
                 reply += ('the week input doesn\'t seem to be a valid number.');
-                reply += `\nTheproper usage would be: \`${prefix}schedule [week number] [-all (for played matches)]\``;
+                reply += `\nTheproper usage would be: \`${data[message.guild].prefix}schedule [week number] [-all (for played matches)]\``;
                 return message.reply(reply);
             }
           }
@@ -50,8 +46,7 @@ var selectedweek = null;
           const sheets = google.sheets({ version: "v4", auth });
           sheets.spreadsheets.values.get(
             {
-              //change with data.guild.spreadsheetid
-              spreadsheetId: "1k-XqY4xWr26uyhSsqhoyvXaQb-GIOczRtXfvJaH8-nM",
+              spreadsheetId: spreadsheetId,
               range: "Pool Play!A2:G",
             },
             (err, res) => {

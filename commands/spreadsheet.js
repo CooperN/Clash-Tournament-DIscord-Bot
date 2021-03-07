@@ -6,7 +6,7 @@ module.exports = {
     guildOnly: true,
     cooldown: 30,
     admin: false,
-    execute(client, message){
-        message.reply('https://docs.google.com/spreadsheets/d/1X_UgYtLPzK5rBr2YbPpDDWNEakEaB1YHk3e6aA1fl8I/edit?usp=drivesdk');
+    execute(client, message, args, playerData, data){
+        message.reply(data[message.guild].spreadsheetlink);
     }
     };

@@ -2,15 +2,7 @@ const fetch = require("node-fetch"); //used for api calls
 const { google } = require("googleapis");
 const googlefunctions = require("./../googlefunctions");
 
-const config = {
-  token: process.env.token,
-  owner: process.env.owner,
-  prefix: process.env.prefix,
-};
-
-const key = "Bearer " + config.token;
-
-
+var spreadsheetId = null;
 
 module.exports = {
   name: "join",
@@ -24,6 +16,7 @@ module.exports = {
     let member = "";
     let index = null;
     let name = "";
+    spreadsheetId = data[message.guild].spreadsheetid;
 
     // change to guild
     if (!data.signupopen) return message.reply('sign ups are not currently open');
@@ -65,11 +58,11 @@ module.exports = {
       }
       if (numleague == 0) {
         return message.channel.send(
-          `${playername} is not in a league. <@&725409051416199240> add player to a league \n \n ${playername} please run the !profile command to show your current trophies`
+          `${playername} is not in a league. <@&${data[message.guild].adminrole}> add player to a league \n \n ${playername} please run the !profile command to show your current trophies`
         );
       } else if (numleague > 1) {
         return message.channel.send(
-          `${playername} is in more than one league. <@&725409051416199240> remove player from one of the leagues`
+          `${playername} is in more than one league. <@&${data[message.guild].adminrole}> remove player from one of the leagues`
         );
       }
 
@@ -78,7 +71,7 @@ module.exports = {
       const url = "https://api.clashroyale.com/v1/players/%23" + playertagurl;
 
       fetch(url, {
-        headers: { "Content-Type": "application/json", Authorization: key },
+        headers: { "Content-Type": "application/json", Authorization: "Bearer " + process.env.token },
       })
         .catch((err) => console.error(err))
         .then((res) => res.json())
@@ -103,7 +96,7 @@ module.exports = {
             const sheets = google.sheets({ version: "v4", auth });
             sheets.spreadsheets.values.get(
               {
-                spreadsheetId: "1k-XqY4xWr26uyhSsqhoyvXaQb-GIOczRtXfvJaH8-nM",
+                spreadsheetId: data[message.guild].spreadsheetid,
                 range: "Players!A2:E",
               },
               (err, res) => {
@@ -159,7 +152,7 @@ module.exports = {
               let range = "Players!A2";
               sheets.spreadsheets.values.append(
                 {
-                  spreadsheetId: "1k-XqY4xWr26uyhSsqhoyvXaQb-GIOczRtXfvJaH8-nM",
+                  spreadsheetId: spreadsheetId,
                   range,
                   valueInputOption: "RAW",
                   resource,
@@ -177,7 +170,7 @@ module.exports = {
               let range = `Players!A${index + 2}`;
               sheets.spreadsheets.values.update(
                 {
-                  spreadsheetId: "1k-XqY4xWr26uyhSsqhoyvXaQb-GIOczRtXfvJaH8-nM",
+                  spreadsheetId: spreadsheetId,
                   range,
                   valueInputOption: "RAW",
                   resource,

@@ -4,13 +4,8 @@ const { google } = require("googleapis");
 const updateleaderboard = require("../updateleaderboard");
 const googlefunctions = require("./../googlefunctions");
 
-const config = {
-  token: process.env.token,
-  owner: process.env.owner,
-  prefix: process.env.prefix,
-};
-const key = "Bearer " + config.token;
 var biggerscopemessage = new Object;
+var spreadsheetId = null;
 var matchnumber = [];
 let winner = "";
 let playerWins = 0;
@@ -28,8 +23,9 @@ module.exports = {
   shortdescription: 'Send match results',
   guildOnly: true,
   cooldown: 5,
-  execute(client, message, args, playerData){
+  execute(client, message, args, playerData, data){
     biggerscopemessage = message;
+    spreadsheetId = data[message.guild].spreadsheetid;
     isPlayer1 = null;
     matchnumber = [];
     winner = "";
@@ -58,7 +54,7 @@ module.exports = {
   
       fetch(url, {
         //body:    JSON.stringify(body),
-        headers: { "Content-Type": "application/json", Authorization: key },
+        headers: { "Content-Type": "application/json", Authorization: "Bearer " + process.env.token },
       })
         .catch((err) => console.error(err))
         .then((res) => res.json())
@@ -166,15 +162,15 @@ module.exports = {
             googlefunctions.getcredentials(getplayerdata);
   
             message.channel.send(exampleEmbed);
-            const resultschannel = client.channels.cache.get("737135505694654525");            
-            if(message.channel.id != "732695941303500882"){
+            const resultschannel = client.channels.cache.get(data[message.guild].resultschannel);            
+            if(message.channel.id != data[message.guild].testchannel){
               resultschannel.send(exampleEmbed);
             }
         });
 
-        let badresult = updateleaderboard.updateleaderboard();      
+        let badresult = updateleaderboard.updateleaderboard(message.guild);      
 
-        if (badresult) 
+        if (badresult) //will be populated if no matches were found
           return message.channel.send(badresult);
     }  }
 };
@@ -184,7 +180,7 @@ function getplayerdata(auth) {
     const sheets = google.sheets({ version: "v4", auth });
     sheets.spreadsheets.values.get(
       {
-        spreadsheetId: "1k-XqY4xWr26uyhSsqhoyvXaQb-GIOczRtXfvJaH8-nM",
+        spreadsheetId: spreadsheetId,
         range: "Pool Play!A2:G",
       },
       (err, res) => {
@@ -256,7 +252,7 @@ function getplayerdata(auth) {
         };
       sheets.spreadsheets.values.update(
         {
-          spreadsheetId: "1k-XqY4xWr26uyhSsqhoyvXaQb-GIOczRtXfvJaH8-nM",
+          spreadsheetId: spreadsheetId,
           range: `Pool Play!G${rownumber}`,
           valueInputOption: "RAW",
           resource,

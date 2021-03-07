@@ -1,22 +1,10 @@
 Places to add guild info to write data	
-	closesignup.js
-	addnotify - notifyrole
-    createpoolplay
-        spreadsheet id - pull from datas
-    Daily - for money per guild
-    games
-    gamesleft
-    help
-    join
+    leaderboard
+    updateleaderboard
+    results
     
-Guild Settings
-    Add notify - add command
-    notify - add guild roles/settings to change role 
-        addnotify
-    balance? - guild setting
-        balance per Guild
-    help
-        Add admin role
+Add player @ modify target
+    games
 
 New
     GuildSetSpreadsheet

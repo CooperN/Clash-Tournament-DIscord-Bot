@@ -5,6 +5,7 @@ var robin = require('roundrobin');
 
 let poolplaymatches = new Array;
 var biggerscopemessage = new Object;
+var biggerscopedata = new Object;
 let user = "";
 
 module.exports = {
@@ -14,8 +15,9 @@ module.exports = {
   guildOnly: true,
   cooldown: 10,
   admin: true,
-  execute(client, message) {
+  execute(client, message, args, playerData, data) {
     biggerscopemessage = message;
+    biggerscopedata = data;
     poolplaymatches = [];
     user = message.author.username;
           googlefunctions.getcredentials(clearsheet);
@@ -28,7 +30,7 @@ function getplayerdata(auth) {
     sheets.spreadsheets.values.get(
       {
         //change to pull from data
-        spreadsheetId: "1k-XqY4xWr26uyhSsqhoyvXaQb-GIOczRtXfvJaH8-nM",
+        spreadsheetId: biggerscopedata[biggerscopemessage.guild].spreadsheetid,
         range: "Players!A2:E",
       },
       (err, res) => {
@@ -108,7 +110,7 @@ function setmatchdata(auth) {
     sheets.spreadsheets.values.append(
       {
         //change this to pull from data
-        spreadsheetId: "1k-XqY4xWr26uyhSsqhoyvXaQb-GIOczRtXfvJaH8-nM",
+        spreadsheetId: biggerscopedata[biggerscopemessage.guild].spreadsheetid,
         range: "Pool Play",
         valueInputOption: "RAW",
         resource,
@@ -129,13 +131,13 @@ function setmatchdata(auth) {
     sheets.spreadsheets.values.clear(
       {
         // change this to pull from data
-        spreadsheetId: "1k-XqY4xWr26uyhSsqhoyvXaQb-GIOczRtXfvJaH8-nM",
+        spreadsheetId: biggerscopedata[biggerscopemessage.guild].spreadsheetid,
         range: "Pool Play",
       },
       (err) => {
         if (err)
           return console.log("The API returned an error: " + err);
-        console.log(`poolplaysheet was cleared by ${user}`);
+        console.log(`${biggerscopemessage.guild} poolplaysheet was cleared by ${user}`);
       }
     );
   }

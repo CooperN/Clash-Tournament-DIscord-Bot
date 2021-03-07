@@ -41,3 +41,5 @@ Add the following to root:
   - I'm thinking one player suggest the invalidation !invalidate @otherplayer
   - Other player then reacts yes or no
     - if no then @mod to check on it and ask player to give reason - maybe post in issues
+- card ban
+  - after a bo3 match the loser can select a card to be banned for the rest of the bo3

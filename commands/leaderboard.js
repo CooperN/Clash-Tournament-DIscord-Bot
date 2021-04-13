@@ -20,9 +20,9 @@ const discord = require("discord.js"); //discord commands
           let PlayerStats = JSON.parse(fs.readFileSync("Storage/playerStats.json", "utf8"));
 
 
-          const PlayerStatsAsArray = Object.keys(PlayerStats).map(function (key) {
-            PlayerStats[key].name = key;
-            return PlayerStats[key];
+          const PlayerStatsAsArray = Object.keys(PlayerStats[message.guild]).map(function (key) {
+            PlayerStats[message.guild][key].name = key;
+            return PlayerStats[message.guild][key];
           })
           .sort(function (itemA, itemB) {
             if(itemB.wins == itemA.wins && itemB.matchwins == itemA.matchwins)

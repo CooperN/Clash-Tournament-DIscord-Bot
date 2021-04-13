@@ -5,6 +5,7 @@ module.exports = {
   description: 'adds initial guild data',
   execute(client, message, args, data){
     data[message.guild] = {};
+    data[message.guild].seasonnumber = 0;
     data[message.guild].tournamentweek = 0;
     data[message.guild].signupopen = false;
     data[message.guild].prefix = process.env.prefix;

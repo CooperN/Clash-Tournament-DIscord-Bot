@@ -2,6 +2,7 @@ const { google } = require("googleapis");
 const googlefunctions = require("./../googlefunctions");
 const math = require("mathjs");
 var robin = require('roundrobin');
+const fs = require("fs"); //file interaction
 
 let poolplaymatches = new Array;
 var biggerscopemessage = new Object;
@@ -20,6 +21,18 @@ module.exports = {
     biggerscopedata = data;
     poolplaymatches = [];
     user = message.author.username;
+
+    data[message.guild].seasonnumber = data[message.guild].seasonnumber + 1;
+
+    fs.writeFileSync(
+      "Storage/data.json",
+      JSON.stringify(data),
+      (err) => {
+        //This writes the changes to the JSON
+        if (err) console.error(err);
+      }
+    );
+
           googlefunctions.getcredentials(clearsheet);
           googlefunctions.getcredentials(getplayerdata);
   },

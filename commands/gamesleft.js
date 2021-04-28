@@ -6,7 +6,7 @@ var biggerscopeargs = new Object;
 var matches = new Array;
 var playedmatches = new Array;
 var selectedweek = null;
-var spreadsheetId
+var spreadsheetId;
   module.exports = {
       name: 'gamesleft',
       description: 'Shows all remaining games for the selected week',
@@ -78,7 +78,25 @@ var spreadsheetId
                       playedmessagestring += `${match[0]}  ${match[1]} vs ${match[2]} | Winner - ${match[3]}\n`;
                     }
                   }
-                  biggerscopemessage.channel.send(`Matches to be played are:\n${messagestring}${playedmessagestring}`);
+                  console.log(`Matches to be played are:\n${messagestring}${playedmessagestring}`);
+                  console.log(`Matches to be played are:\n${messagestring}${playedmessagestring}`.length);
+                  
+                  let lists = chunkSubstr(`Matches to be played are:\n${messagestring}${playedmessagestring}`, 2000);
+                  console.log(lists);
+                  for(const list in lists){
+                    biggerscopemessage.channel.send(lists[list]);
+                  }
                 }
               }
           );}
+
+          function chunkSubstr(str, size) {
+            const numChunks = Math.ceil(str.length / size);
+            const chunks = new Array(numChunks);
+          
+            for (let i = 0, o = 0; i < numChunks; ++i, o += size) {
+              chunks[i] = str.substr(o, size);
+            }
+          
+            return chunks;
+          }

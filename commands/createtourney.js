@@ -1,6 +1,8 @@
 const updateleaderboard = require("../updateleaderboard");
 const challonge = require('challonge');
 const fs = require("fs"); //file interaction
+const util = require('util');
+
 
 module.exports = {
     name: 'createtourney',
@@ -47,59 +49,72 @@ module.exports = {
         }
       });
 
-      // create a new tournament
-      challongeclient.tournaments.create({
-        tournament: {
-          name: message.guild.name + ' CRS Season ' + data[message.guild].seasonnumber,
-          url: message.guild.name.replace(/\s/g, '_') + '_CRS_Season_'+data[message.guild].seasonnumber,
-          tournamentType: 'single elimination',
-        },
-        callback: (err, body) => {
-          if (err) {
-            console.log(err, body);
-            return message.reply("There was an issue creating the tournament. Please contact @chocolateEinstein");
-          }
-          if (body[0] == 'error'){
-            console.log(err, body);
-            return message.reply("There was an issue creating the tournament. Please contact @chocolateEinstein");
-          }
-/*           console.log(body);
-          console.log(body.tournament);
-          console.log(body[0]); */
 
-          tournyid = body.tournament.id;
-          data[message.guild].tournament = body.tournament.id;
-          data[message.guild].tournamenturl = 'https://challonge.com/' + body.tournament.url;
+      let uri = message.guild.name.replace(/\s/g, '_') + '_CRS_Season_'+data[message.guild].seasonnumber;
+      if(data[message.guild].tournamenturl == `https://challonge.com/${uri}`){
+        message.channel.send('There is already a Url Created for this Season. I will update the participants');
+      } else {
+        // create a new tournament
+        challongeclient.tournaments.create({
+          tournament: {
+            name: message.guild.name + ' CRS Season ' + data[message.guild].seasonnumber,
+            url: uri,
+            tournamentType: 'single elimination',
+          },
+          callback: (err, body) => {
+            if (err) {
+              console.log(err, body);
+              return message.reply(`Error: ${err.statusCode} - ${err.errors}\nThere was an issue creating the tournament. Please contact @chocolateEinstein`);
+            }
+            if (body[0] == 'error'){
+              console.log(err, body);
+              return message.reply(`Error: ${body[1]}\nThere was an issue creating the tournament. Please contact @chocolateEinstein`);
+            }
+
+            tournyid = body.tournament.id;
+            data[message.guild].tournament = body.tournament.id;
+            data[message.guild].tournamenturl = 'https://challonge.com/' + body.tournament.url;
+
+              fs.writeFileSync(
+                  "Storage/data.json",
+                  JSON.stringify(data),
+                  (err) => {
+                    //This writes the changes to the JSON
+                    if (err) console.error(err);
+                  }
+                );
           
-            fs.writeFileSync(
-                "Storage/data.json",
-                JSON.stringify(data),
-                (err) => {
-                  //This writes the changes to the JSON
-                  if (err) console.error(err);
-                }
-              );
-
             message.channel.send(`${body.tournament.name} tournament has been created! The url is https://challonge.com/${body.tournament.url}`);
             console.log(PlayerStatsAsArray);
             PlayerStatsAsArray.forEach(player => {
               console.log(player.name);
-              challongeclient.participants.create({
-                id: tournyid,
-                participant: {
-                  name: player.name,
-                  seed: 1
-                },
-                callback: (err, body) => {
-                  if (err) console.log(err, body);
-                }
-              });
-            });
-            message.channel.send(`Tournament players have been added!`);
+              // challongeclient.participants.create({
+              //   id: tournyid,
+              //   participant: {
+              //     name: player.name,
+              //     seed: 1
+              //   },
+              //   callback: (err, body) => {
+              //     if (err) console.log(err, body);
+              //   }
+              // });
+              const asyncFunction = util.promisify(challongeclient.participants.create);
 
+              asyncFunction({
+                  id: tournyid,
+                  participant: {
+                    name: player.name,
+                    seed: 1
+                  },
+                  callback: (err, body) => {
+                    if (err) console.log(err, body);
+                  }
+              
+            });
+          });
+            message.channel.send(`Tournament players have been added!`);
           }
         });
-
-
+      }
     }
 };

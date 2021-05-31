@@ -57,16 +57,22 @@ function getplayerdata(auth) {
                       } else if(match[4] != match[6]) {
                         loser = match[4];                 
                       }
-                      PlayerStats[guild][winner].wins += 1;
-                      PlayerStats[guild][loser].losses += 1;
-                      PlayerStats[guild][player1].matchwins += Number(match[7]);
-                      PlayerStats[guild][player2].matchwins += Number(match[8]);
-                      PlayerStats[guild][player2].matchlosses += Number(match[7]);
-                      PlayerStats[guild][player1].matchlosses += Number(match[8]);
-                      PlayerStats[guild][player1].towerstaken += Number(match[9]);
-                      PlayerStats[guild][player2].towerstaken += Number(match[10]);
-                      PlayerStats[guild][player1].towerslost += Number(match[10]);
-                      PlayerStats[guild][player2].towerslost += Number(match[9]);
+                      try {
+                        PlayerStats[guild][winner].wins += 1;
+                        PlayerStats[guild][loser].losses += 1;
+                        PlayerStats[guild][player1].matchwins += Number(match[7]);
+                        PlayerStats[guild][player2].matchwins += Number(match[8]);
+                        PlayerStats[guild][player2].matchlosses += Number(match[7]);
+                        PlayerStats[guild][player1].matchlosses += Number(match[8]);
+                        PlayerStats[guild][player1].towerstaken += Number(match[9]);
+                        PlayerStats[guild][player2].towerstaken += Number(match[10]);
+                        PlayerStats[guild][player1].towerslost += Number(match[10]);
+                        PlayerStats[guild][player2].towerslost += Number(match[9]);
+                      }
+                      catch (e) {
+                        console.log("There was an error updating the leaderboard");
+                        console.log(PlayerStats[guild][winner] + " vs " + PlayerStats[guild][loser]);
+                      }
                 }
           }
         }

@@ -55,16 +55,25 @@ function getplayerdata(auth) {
                       } else if(match[4] != match[6]) {
                         loser = match[4];                 
                       }
-                      PlayerStats[winner].wins += 1;
-                      PlayerStats[loser].losses += 1;
-                      PlayerStats[player1].matchwins += Number(match[7]);
-                      PlayerStats[player2].matchwins += Number(match[8]);
-                      PlayerStats[player2].matchlosses += Number(match[7]);
-                      PlayerStats[player1].matchlosses += Number(match[8]);
-                      PlayerStats[player1].towerstaken += Number(match[9]);
-                      PlayerStats[player2].towerstaken += Number(match[10]);
-                      PlayerStats[player1].towerslost += Number(match[10]);
-                      PlayerStats[player2].towerslost += Number(match[9]);
+                      try {
+                        PlayerStats[winner].wins += 1;
+                        PlayerStats[loser].losses += 1;
+                        PlayerStats[player1].matchwins += Number(match[7]);
+                        PlayerStats[player2].matchwins += Number(match[8]);
+                        PlayerStats[player2].matchlosses += Number(match[7]);
+                        PlayerStats[player1].matchlosses += Number(match[8]);
+                        PlayerStats[player1].towerstaken += Number(match[9]);
+                        PlayerStats[player2].towerstaken += Number(match[10]);
+                        PlayerStats[player1].towerslost += Number(match[10]);
+                        PlayerStats[player2].towerslost += Number(match[9]);
+                      }
+                      catch (e) {
+                        console.log("There was an issue updating the leaderboard");
+                        console.log(PlayerStats[winner] + " vs " + PlayerStats[loser]);
+                        console.log(winner + " vs " + loser);
+                        console.log(e);
+                        return "There was an issue updating the leaderboard. Contact @ChocolateEinstein"
+                      }
                 }
           }
         }

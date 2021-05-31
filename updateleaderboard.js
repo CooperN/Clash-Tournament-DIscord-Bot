@@ -72,7 +72,7 @@ function getplayerdata(auth) {
                         console.log(PlayerStats[winner] + " vs " + PlayerStats[loser]);
                         console.log(winner + " vs " + loser);
                         console.log(e);
-                        return "There was an issue updating the leaderboard. Contact @ChocolateEinstein"
+                        return "There was an issue updating the leaderboard. Contact @ChocolateEinstein";
                       }
                 }
           }

@@ -25,3 +25,6 @@ Add the following to root:
 - function to set a match time to play, suggest times, accept times, have an alert
 - casino games
 - remind of games to played 
+- channel to post logs
+    - configureable by clan 
+    - all api errors and others post details there

@@ -4,6 +4,8 @@ const { google } = require("googleapis");
 const updateleaderboard = require("../updateleaderboard");
 const googlefunctions = require("./../googlefunctions");
 
+const checkClashProfile = require("../helpers/checkClashProfile");    
+
 var biggerscopemessage = new Object;
 var spreadsheetId = null;
 var matchnumber = [];
@@ -24,6 +26,11 @@ module.exports = {
   guildOnly: true,
   cooldown: 5,
   execute(client, message, args, playerData, data){
+
+    if(!checkClashProfile.checkClashProfile(playerData[message.author.id].profile, message.channel)) return;  
+
+    apiurl = "https://api.clashroyale.com/v1/players/%23" + playerData[message.author.id].profile + "/battlelog";
+
     biggerscopemessage = message;
     spreadsheetId = data[message.guild].spreadsheetid;
     isPlayer1 = null;
@@ -36,23 +43,9 @@ module.exports = {
     playerName = null;
     opponentName = null;
     rownumber = 0;
-    if (!playerData[message.author.id].profile) {
-      message.channel.send({
-        embed: {
-          title: "Add Clash Profile",
-          //color: 0xF1C40F,
-          description:
-            "You have not added your profile tag. To add your profile tag type !addp playertag",
-        },
-      });
-    } else if (playerData[message.author.id].profile) {
-      let playertagurl = playerData[message.author.id].profile;
-      const url =
-        "https://api.clashroyale.com/v1/players/%23" +
-        playertagurl +
-        "/battlelog";
+    
   
-      fetch(url, {
+      fetch(apiurl, {
         //body:    JSON.stringify(body),
         headers: { "Content-Type": "application/json", Authorization: "Bearer " + process.env.token },
       })
@@ -172,7 +165,7 @@ module.exports = {
 
         if (badresult) //will be populated if no matches were found
           return message.channel.send(badresult);
-    }  }
+    }
 };
 
 function getplayerdata(auth) {

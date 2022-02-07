@@ -14,6 +14,7 @@ module.exports = {
   name: 'profile',
   description: 'Displays clash profile information',
   shortdescription: 'Clash profile Info',
+  aliases: ['player'],
   cooldown: 5,
   execute(client, message, args, playerData){
     if (!playerData[message.author.id].profile) {

@@ -17,6 +17,8 @@ let playerWins = 0;
 let opponentWins = 0;
 let playerTowers = 0;
 let opponentTowers = 0;
+let playerCards = [];
+let opponentCards = [];
 let playerName;
 let opponentName;
 let rownumber = 0;
@@ -97,7 +99,7 @@ module.exports = {
          }
          if(x == 0){
           message.channel.send(
-            `Are you sure you've played a tournament game recently? \n Your last game was against ${json[0].opponent[0].name}. Was that part of this tournament? \n It was a ${json[0].type} match in the ${json[0].gameMode.name} gamemode. Matches in this tournament are 'friendly' \n \n The game was not logged. If this is a mistake, notify ChocolateEinstein`
+            `Are you sure you've played a tournament game recently? \n Your last game was against ${json[0].opponent[0].name}. Was that part of this tournament? \n It was a ${json[0].type} match in the ${json[0].gameMode.name} gamemode. Matches in this tournament are 'friendly' \n \n The game was not logged. If this is a mistake, notify an admin`
           );
           return;
          } else if (uniquegames.length > 1) {

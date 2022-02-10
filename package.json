@@ -21,6 +21,7 @@
     "mathjs": "^7.1.0",
     "moment": "^2.27.0",
     "node-fetch": "^2.6.0",
+    "promise": "^8.1.0",
     "roundrobin": "^1.0.3"
   },
   "devDependencies": {

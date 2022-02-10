@@ -1,3 +1,5 @@
+import { Player } from "../helpers/objects";
+
 module.exports = {
   name: 'balance',
   description: 'sends player bank account balance',
@@ -5,6 +7,7 @@ module.exports = {
   aliases: ['bank', 'money'],
   shortdescription: 'Bank Balance',
   execute(client, message, args, playerData){
+    player = new Pla
     message.channel.send({
       embed: {
         title: "Bank",

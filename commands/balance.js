@@ -1,4 +1,4 @@
-import { Player } from "../helpers/objects";
+const objects = require("../helpers/objects")
 
 module.exports = {
   name: 'balance',
@@ -7,7 +7,6 @@ module.exports = {
   aliases: ['bank', 'money'],
   shortdescription: 'Bank Balance',
   execute(client, message, args, playerData){
-    player = new Pla
     message.channel.send({
       embed: {
         title: "Bank",

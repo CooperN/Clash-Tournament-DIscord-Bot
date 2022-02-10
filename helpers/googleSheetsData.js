@@ -9,8 +9,8 @@ module.exports = {
     getTournamentMatches: async function(spreadsheetId){
         return new Promise(function (resolve, reject) {
             if (spreadsheetId == null) reject("Error. No spreadsheet ID")
-        const test = await googlefunctions.getcredentials(getMatches, spreadsheetId)
-        resolve(await googlefunctions.getcredentials(getMatches, spreadsheetId));
+        const test = googlefunctions.getcredentials(getMatches, spreadsheetId)
+        resolve(googlefunctions.getcredentials(getMatches, spreadsheetId));
         }).catch(function (ex) {
             reject();
         });

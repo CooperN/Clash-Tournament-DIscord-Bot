@@ -1,6 +1,6 @@
 const fs = require("fs"); //file interaction
 
-export class PlayerList {
+class PlayerList {
     constructor(){
         this.playerData = JSON.parse(fs.readFileSync("Storage/playerData.json", "utf8"));
     }
@@ -31,7 +31,7 @@ export class PlayerList {
     }
 }
 
-export class Player {
+class Player {
     constructor(username, clashName, profile) {
         this.username = username
         this.clashName = clashName
@@ -50,6 +50,8 @@ export class Player {
 
 }
 module.exports = {
+    PlayerList,
+    Player,
     createMatchResults: function(player1, player2, winner, player1crowns, player2crowns) {
         return {
             player1,

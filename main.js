@@ -6,6 +6,9 @@ const createplayer = require("./initialplayerdata");
 const createguild = require("./initialguilddata");
 const client = new discord.Client();
 const cooldowns = new discord.Collection();
+const objects = require("./helpers/objects")
+
+
 
 require("dotenv-flow").config();
 
@@ -25,7 +28,8 @@ client.once("ready", () => {
   console.log(`Logged in as ${client.user.tag}!`);
 });
 
-let playerData = JSON.parse(fs.readFileSync("Storage/playerData.json", "utf8"));
+//let playerData = JSON.parse(fs.readFileSync("Storage/playerData.json", "utf8"));
+let playerData = new objects.PlayerList
 let data = JSON.parse(fs.readFileSync("Storage/data.json", "utf8"));
 
 client.on("message", async (message) => {

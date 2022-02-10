@@ -1,54 +1,57 @@
 const fs = require("fs"); //file interaction
 
-class PlayerList {
+function savePlayerList(playerData){
+    fs.writeFileSync(
+        "Storage/playerData2.json",
+        JSON.stringify(playerData),
+        (err) => {
+          if (err) console.error(err);
+        }
+      ); 
+}
+
+class PlayerList {    
     constructor(){
-        this.playerData = JSON.parse(fs.readFileSync("Storage/playerData.json", "utf8"));
+        this.playerData = JSON.parse(fs.readFileSync("Storage/playerData2.json", "utf8"));
     }
 
-    addPlayer(message, playerData){
+    addNewPlayer(message){
         this.playerData[message.author.id] = {}; //creates a user if they don't have one
         this.playerData[message.author.id].money = 1000; //creates money object if they don't have one
         this.playerData[message.author.id].lastDaily = "Not Collected";
         this.playerData[message.author.id].username = message.author.username;
       
-        fs.writeFileSync(
-          "Storage/playerData.json",
-          JSON.stringify(this.playerData),
-          (err) => {
-            if (err) console.error(err);
-          }
-        );  
+        savePlayerList(this.playerData)
+    }
+
+    addPlayerProfile(messageauthorid, clashname, profile){
+        this.playerData[messageauthorid].clashname = clashname;
+        this.playerData[messageauthorid].profile = profile;
+
+        savePlayerList(this.playerData)
+    }
+
+    getplayer(messageauthorid){
+        if(!this.playerData[messageauthorid]) return false
+        return new Player(messageauthorid,this.playerData[messageauthorid].username,this.playerData[messageauthorid].clashname,this.playerData[messageauthorid].profile,this.playerData[messageauthorid].money,this.playerData[messageauthorid].lastDaily)
     }
 
     saveList() {
-        fs.writeFileSync(
-            "Storage/playerData.json",
-            JSON.stringify(this.playerData),
-            (err) => {
-              if (err) console.error(err);
-            }
-          ); 
+        savePlayerList(this.playerData)
     }
 }
 
 class Player {
-    constructor(username, clashName, profile) {
+    constructor(discordID, username, clashName, profile, money, lastDaily) {
+        this.discordID = discordID
         this.username = username
         this.clashName = clashName
         this.money = 0
         this.lastDaily = null
         this.profile = this.profile
     }
-
-    saveplayer(){
-        //saves to the json array
-    }
-    getPlayer(){
-        //gets player info from json based on clash name or discord name
-    }
-
-
 }
+
 module.exports = {
     PlayerList,
     Player,

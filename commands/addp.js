@@ -1,5 +1,4 @@
 const fetch = require("node-fetch"); //used for api calls
-const fs = require("fs"); //file interaction
 
 const config = {
   token: process.env.token,
@@ -20,9 +19,7 @@ module.exports = {
       message.channel.send({
         embed: {
           title: "Nice try",
-          //color: 0xF1C40F,
-          description:
-            "Don't type the word playertag. You have to actually use yours",
+          description: "Don't type the word playertag. You have to actually use yours",
         },
       });
     } else {
@@ -32,7 +29,7 @@ module.exports = {
       if (message.member.nickname) {
         name = message.member.nickname;
       } else {
-        name = message.member.name;
+        name = message.author.username;
       }
       
       //check profile is correct
@@ -45,7 +42,6 @@ module.exports = {
       const url = "https://api.clashroyale.com/v1/players/%23" + playertagurl;
   
       fetch(url, {
-        //body:    JSON.stringify(body),
         headers: {
           "Content-Type": "application/json",
           Authorization: key,
@@ -56,7 +52,6 @@ module.exports = {
         })
         .then((res) => res.json())
         .then((json) => {
-          ///////pasted
           let reply = "";
           playername = json.name;
           if (!playername) {
@@ -73,7 +68,7 @@ module.exports = {
             return;
           } else { //add in guild... not rename if setting off. Rename in guild if applicable
             if(data[message.guild].rename) {
-              if(message.author.username != playername && message.member.nickname != playername){
+              if(name != playername){
                 if(message.member.roles.cache.has('725409051416199240')){
                   message.channel.send('I don\'t have permission to change the nickname of an admin!');
                 } else {
@@ -82,7 +77,7 @@ module.exports = {
                     } else {
                       //if admin console.log(can't rename)
                       message.member.setNickname(playername);
-                      reply = (`\n\nAlso, ${message.author} your Discord name ${name} is different than your clash name ${playername}. I've fixed it for you. Say thank you.`);
+                      reply = (`\n\nAlso, ${message.author} your Discord name ${name} is different than your clash name ${playername}. That will make it hard for people to find you for games. I've fixed it for you. Say thank you.`);
                     }
                 }
               }
@@ -91,21 +86,7 @@ module.exports = {
             message.channel.send(
               `Added account to your profile with the name of ${playername}. ${reply}`
             );
-
-            playerData[
-              message.author.id
-            ].clashname = playername;
-            playerData[
-              message.author.id
-            ].profile = playertagurl;
-  
-            fs.writeFileSync(
-              "Storage/playerData.json",
-              JSON.stringify(playerData),
-              (err) => {
-                if (err) console.error(err);
-              }
-            );
+            playerData.addPlayerProfile(message.author.id, playername, playertagurl)
           }
         });
     }

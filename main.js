@@ -44,12 +44,14 @@ client.on("message", async (message) => {
   const args = message.content.slice(data[message.guild].prefix.length).trim().split(/ +/);
   const commandName = args.shift().toLowerCase();
 
-  playerData = JSON.parse(fs.readFileSync("Storage/playerData.json", "utf8"));
+  //playerData = JSON.parse(fs.readFileSync("Storage/playerData.json", "utf8"));
+  playerData = new objects.PlayerList
   data = JSON.parse(fs.readFileSync("Storage/data.json", "utf8"));
 
-  if (!playerData[message.author.id]) {
-    createplayer.execute(client, message, args, playerData);
-    playerData = JSON.parse(fs.readFileSync("Storage/playerData.json", "utf8"));
+  if (!playerData.getplayer(message.author.id)) {
+    playerData.addNewPlayer(message)
+    //createplayer.execute(client, message, args, playerData);
+    //playerData = JSON.parse(fs.readFileSync("Storage/playerData.json", "utf8"));
   }
 
   const command = client.commands.get(commandName)

@@ -2,6 +2,8 @@
 
 Doumentation can be found at our [Website](https://coopern.github.io/Clash-Tournament-Discord-Bot/)
 
+You can donate to run the bot [here](https://www.paypal.com/donate/?hosted_button_id=PMAB3QXG9HGC2)
+
 ## Getting Started
 
 Add the following to root:

@@ -2,11 +2,10 @@
 //devbot link https://discordapp.com/oauth2/authorize?client_id=772467500754927617&scope=bot&permissions=2146958847
 const discord = require("discord.js"); //discord commands
 const fs = require("fs"); //file interaction
-const createplayer = require("./initialplayerdata");
 const createguild = require("./initialguilddata");
 const client = new discord.Client();
 const cooldowns = new discord.Collection();
-const objects = require("./helpers/objects")
+const objects = require("./helpers/objects");
 
 
 
@@ -29,7 +28,7 @@ client.once("ready", () => {
 });
 
 //let playerData = JSON.parse(fs.readFileSync("Storage/playerData.json", "utf8"));
-let playerData = new objects.PlayerList
+let playerData = new objects.PlayerList;
 let data = JSON.parse(fs.readFileSync("Storage/data.json", "utf8"));
 
 client.on("message", async (message) => {
@@ -45,11 +44,11 @@ client.on("message", async (message) => {
   const commandName = args.shift().toLowerCase();
 
   //playerData = JSON.parse(fs.readFileSync("Storage/playerData.json", "utf8"));
-  playerData = new objects.PlayerList
+  playerData = new objects.PlayerList;
   data = JSON.parse(fs.readFileSync("Storage/data.json", "utf8"));
 
   if (!playerData.getplayer(message.author.id)) {
-    playerData.addNewPlayer(message)
+    playerData.addNewPlayer(message);
     //createplayer.execute(client, message, args, playerData);
     //playerData = JSON.parse(fs.readFileSync("Storage/playerData.json", "utf8"));
   }

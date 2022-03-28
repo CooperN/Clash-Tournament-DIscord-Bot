@@ -3,12 +3,12 @@ const googlefunctions = require("./googlefunctions");
 const fs = require("fs"); //file interaction
 
 module.exports = {
-    updateleaderboard: function() {
-        googlefunctions.getcredentials(getplayerdata);
+    updateleaderboard: function(done) {
+        googlefunctions.getcredentials(getplayerdata, done);
     }
 };
 
-function getplayerdata(auth) {
+function getplayerdata(auth, done) {
     var PlayerStats = {};
 
 
@@ -19,8 +19,10 @@ function getplayerdata(auth) {
         range: "Pool Play!A2:K",
       },
       (err, res) => {
-        if (err)
-          return console.log("The API returned an error: " + err);
+        if (err){
+          console.log("The API returned an error: " + err);
+          return done("The API returned an error: " + err);
+        }
         const rows = res.data.values;
         if (rows) {
           for(const match of rows){
@@ -50,12 +52,16 @@ function getplayerdata(auth) {
                       let winner = match[6];
                       let player1 = match[2];
                       let player2 = match[4];
-                      if(match[2] != match[6]){
-                        loser = match[2];
-                      } else if(match[4] != match[6]) {
-                        loser = match[4];                 
+                      if(match[2] == match[6]){
+                        loser = match[4];
+                      } else if(match[4] == match[6]) {
+                        loser = match[2];                 
+                      } else {
+                        console.log(`There was an issue updating the leaderboard. Check line ${rows.indexOf(match) + 2} of the spreadsheet.`);
+                        console.log(match);
+                        console.log("The name of the winner was not found in the match.");
+                        return done (Error (`There was an issue updating the leaderboard. Check line ${rows.indexOf(match) + 2} of the spreadsheet. The name of the winner was not found in the match.`));
                       }
-                      try {
                         PlayerStats[winner].wins += 1;
                         PlayerStats[loser].losses += 1;
                         PlayerStats[player1].matchwins += Number(match[7]);
@@ -66,14 +72,6 @@ function getplayerdata(auth) {
                         PlayerStats[player2].towerstaken += Number(match[10]);
                         PlayerStats[player1].towerslost += Number(match[10]);
                         PlayerStats[player2].towerslost += Number(match[9]);
-                      }
-                      catch (e) {
-                        console.log("There was an issue updating the leaderboard");
-                        console.log(PlayerStats[winner] + " vs " + PlayerStats[loser]);
-                        console.log(winner + " vs " + loser);
-                        console.log(e);
-                        return "There was an issue updating the leaderboard. Contact @ChocolateEinstein";
-                      }
                 }
           }
         }

@@ -173,10 +173,16 @@ module.exports = {
             // }
         });
 
-        let badresult = updateleaderboard.updateleaderboard();      
-
-        if (badresult) 
-          return message.channel.send(badresult);
+        updateleaderboard.updateleaderboard(function (err, result) {
+          // *always* check for err
+          if (err){
+            console.log ('error', err.message, err.stack);
+            message.reply(err.message);
+          } else {
+            console.log ('result', result);
+            message.reply('Leaderboard updated');
+          }
+        });
     }  }
 };
 

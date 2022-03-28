@@ -77,7 +77,7 @@ function getplayerdata(auth, done) {
         }
 
           if(PlayerStats.length == 0){
-            return `No Matches have been played. Get going!`;
+            return done (`No Matches have been played. Get going!`);
           } else {
             fs.writeFileSync(
               "Storage/playerStats.json",
@@ -87,6 +87,7 @@ function getplayerdata(auth, done) {
                 if (err) console.error(err);
               }
             );
+            return done(null, 'Leaderboard updated');
           }
         }
       }

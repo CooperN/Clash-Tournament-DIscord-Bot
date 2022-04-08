@@ -3,16 +3,17 @@ const googlefunctions = require("./googlefunctions");
 const fs = require("fs"); //file interaction
 let guild = null;
 module.exports = {
-    updateleaderboard: function(guildid) {
-      guild = guildid;
-        googlefunctions.getcredentials(getplayerdata);
+    updateleaderboard: function(done) {
+        googlefunctions.getcredentials(getplayerdata, done);
     }
 };
 
-function getplayerdata(auth) {
+function getplayerdata(auth, done) {
+    var PlayerStats = {};
+
 
     let data = JSON.parse(fs.readFileSync("Storage/data.json", "utf8"));
-    var PlayerStats = JSON.parse(fs.readFileSync("Storage/playerStats.json", "utf8"));
+    PlayerStats = JSON.parse(fs.readFileSync("Storage/playerStats.json", "utf8"));
     PlayerStats[guild] = {};
     const sheets = google.sheets({ version: "v4", auth });
     sheets.spreadsheets.values.get(
@@ -21,8 +22,10 @@ function getplayerdata(auth) {
         range: "Pool Play!A2:K",
       },
       (err, res) => {
-        if (err)
-          return console.log("The API returned an error: " + err);
+        if (err){
+          console.log("The API returned an error: " + err);
+          return done("The API returned an error: " + err);
+        }
         const rows = res.data.values;
         if (rows) {
           for(const match of rows){
@@ -52,27 +55,26 @@ function getplayerdata(auth) {
                       let winner = match[6];
                       let player1 = match[2];
                       let player2 = match[4];
-                      if(match[2] != match[6]){
-                        loser = match[2];
-                      } else if(match[4] != match[6]) {
-                        loser = match[4];                 
+                      if(match[2] == match[6]){
+                        loser = match[4];
+                      } else if(match[4] == match[6]) {
+                        loser = match[2];                 
+                      } else {
+                        console.log(`There was an issue updating the leaderboard. Check line ${rows.indexOf(match) + 2} of the spreadsheet.`);
+                        console.log(match);
+                        console.log("The name of the winner was not found in the match.");
+                        return done (Error (`There was an issue updating the leaderboard. Check line ${rows.indexOf(match) + 2} of the spreadsheet. The name of the winner was not found in the match.`));
                       }
-                      try {
-                        PlayerStats[guild][winner].wins += 1;
-                        PlayerStats[guild][loser].losses += 1;
-                        PlayerStats[guild][player1].matchwins += Number(match[7]);
-                        PlayerStats[guild][player2].matchwins += Number(match[8]);
-                        PlayerStats[guild][player2].matchlosses += Number(match[7]);
-                        PlayerStats[guild][player1].matchlosses += Number(match[8]);
-                        PlayerStats[guild][player1].towerstaken += Number(match[9]);
-                        PlayerStats[guild][player2].towerstaken += Number(match[10]);
-                        PlayerStats[guild][player1].towerslost += Number(match[10]);
-                        PlayerStats[guild][player2].towerslost += Number(match[9]);
-                      }
-                      catch (e) {
-                        console.log("There was an error updating the leaderboard");
-                        console.log(PlayerStats[guild][winner] + " vs " + PlayerStats[guild][loser]);
-                      }
+                        PlayerStats[winner].wins += 1;
+                        PlayerStats[loser].losses += 1;
+                        PlayerStats[player1].matchwins += Number(match[7]);
+                        PlayerStats[player2].matchwins += Number(match[8]);
+                        PlayerStats[player2].matchlosses += Number(match[7]);
+                        PlayerStats[player1].matchlosses += Number(match[8]);
+                        PlayerStats[player1].towerstaken += Number(match[9]);
+                        PlayerStats[player2].towerstaken += Number(match[10]);
+                        PlayerStats[player1].towerslost += Number(match[10]);
+                        PlayerStats[player2].towerslost += Number(match[9]);
                 }
           }
         }
@@ -88,6 +90,7 @@ function getplayerdata(auth) {
                 if (err) console.error(err);
               }
             );
+            return done(null, 'Leaderboard updated');
           }
         }
       }

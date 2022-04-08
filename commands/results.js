@@ -29,7 +29,7 @@ module.exports = {
 
     if(!checkClashProfile.checkClashProfile(playerData[message.author.id].profile, message.channel)) return;  
 
-    apiurl = "https://api.clashroyale.com/v1/players/%23" + playerData[message.author.id].profile + "/battlelog";
+    let apiurl = "https://api.clashroyale.com/v1/players/%23" + playerData[message.author.id].profile + "/battlelog";
 
     biggerscopemessage = message;
     spreadsheetId = data[message.guild].spreadsheetid;
@@ -161,11 +161,17 @@ module.exports = {
             }
         });
 
-        let badresult = updateleaderboard.updateleaderboard(message.guild);      
-
-        if (badresult) //will be populated if no matches were found
-          return message.channel.send(badresult);
-    }
+        updateleaderboard.updateleaderboard(function (err, result) {
+          // *always* check for err
+          if (err){
+            console.log ('error', err.message, err.stack);
+            message.reply(err.message);
+          } else {
+            console.log ('result', result);
+            message.reply('Leaderboard updated');
+          }
+        });
+    }  
 };
 
 function getplayerdata(auth) {

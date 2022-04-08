@@ -10,11 +10,15 @@ const updateleaderboard = require("../updateleaderboard");
     cooldown: 30,
     admin: true,
     execute(client, message){
-        let badresult = updateleaderboard.updateleaderboard(message.guild);      
-
-        if (badresult) 
-          return message.channel.send(badresult);
-        else
-          return message.channel.send("Leaderboard has been updated!");
-    }
+        updateleaderboard.updateleaderboard(function (err, result) {
+          // *always* check for err
+          if (err){
+            console.log ('error', err.message, err.stack);
+            message.reply(err.message);
+          } else {
+            console.log ('result', result);
+            message.reply('Leaderboard updated');
+          }
+        });
+      }
 };

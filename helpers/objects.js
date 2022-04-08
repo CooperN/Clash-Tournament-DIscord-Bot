@@ -2,7 +2,7 @@ const fs = require("fs"); //file interaction
 class PlayerList {    
     constructor(){
         try{
-            this.playerData = JSON.parse(fs.readFileSync("Storage/playerData2.json", "utf8"));
+            this.playerData = JSON.parse(fs.readFileSync("Storage/playerData.json", "utf8"));
         } catch(err){
             if(err.message === "Unexpected end of JSON input"){
                 this.playerData = {};
@@ -36,7 +36,7 @@ class PlayerList {
 
     saveList() {
         fs.writeFileSync(
-            "Storage/playerData2.json",
+            "Storage/playerData.json",
             JSON.stringify(this.playerData),
             (err) => {
               if (err) console.error(err);
@@ -47,7 +47,7 @@ class PlayerList {
     }
 
     updatePlayerList() {
-        this.playerData = JSON.parse(fs.readFileSync("Storage/playerData2.json", "utf8"));
+        this.playerData = JSON.parse(fs.readFileSync("Storage/playerData.json", "utf8"));
     }
 
 }
@@ -83,7 +83,7 @@ class Guild {
 
 class GuildData {    
     constructor(){
-        this.guildData = JSON.parse(fs.readFileSync("Storage/data2.json", "utf8"));
+        this.guildData = JSON.parse(fs.readFileSync("Storage/data.json", "utf8"));
     }
 
     addNewGuildData(guildId) {
@@ -115,7 +115,7 @@ class GuildData {
 
     saveGuildData() {
         fs.writeFileSync(
-            "Storage/Data2.json",
+            "Storage/Data.json",
             JSON.stringify(this.playerData),
             (err) => {
               if (err) console.error(err);
@@ -126,7 +126,7 @@ class GuildData {
     }
 
     updateGuildData() {
-        this.playerData = JSON.parse(fs.readFileSync("Storage/Data2.json", "utf8"));
+        this.playerData = JSON.parse(fs.readFileSync("Storage/Data.json", "utf8"));
     }
 
 }

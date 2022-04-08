@@ -6,6 +6,7 @@ const createguild = require("./initialguilddata");
 const client = new discord.Client();
 const cooldowns = new discord.Collection();
 const objects = require("./helpers/objects");
+const { electronMassDependencies } = require("mathjs/lib/entry/dependenciesAny.generated");
 
 
 
@@ -27,32 +28,30 @@ client.once("ready", () => {
   console.log(`Logged in as ${client.user.tag}!`);
 });
 
-//let playerData = JSON.parse(fs.readFileSync("Storage/playerData.json", "utf8"));
 let playerData = new objects.PlayerList;
-//let data = JSON.parse(fs.readFileSync("Storage/data.json", "utf8"));
 let data = new objects.GuildData;
 
 client.on("message", async (message) => {
 
   if (!data.getGuildData(message.guild)) {
     data.addNewGuildData(message.guild);
-    // data = JSON.parse(fs.readFileSync("Storage/data.json", "utf8"));
   }
   
-  if (!message.content.startsWith(data.getGuildPrefix(message.guild)) || message.author.bot) return;
+  if (process.env.discordtoken){
+    message.content.startsWith(data.getGuildPrefix(message.guild))
+  }
+  if (!message.content.startsWith(data.getGuildPrefix(message.guild)) || message.author.bot){
+
+  }
 
   const args = message.content.slice(data.getGuildPrefix(message.guild).length).trim().split(/ +/);
   const commandName = args.shift().toLowerCase();
 
-  //playerData = JSON.parse(fs.readFileSync("Storage/playerData.json", "utf8"));
   playerData.updatePlayerList();
-  // data = JSON.parse(fs.readFileSync("Storage/data.json", "utf8"));
   data.updateGuildData();
 
   if (!playerData.getplayer(message.author.id)) {
     playerData.addNewPlayer(message);
-    //createplayer.execute(client, message, args, playerData);
-    //playerData = JSON.parse(fs.readFileSync("Storage/playerData.json", "utf8"));
   }
 
   const command = client.commands.get(commandName)

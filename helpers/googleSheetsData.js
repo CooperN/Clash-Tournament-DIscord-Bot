@@ -19,7 +19,7 @@ module.exports = {
 
 async function getMatches(auth, spreadsheetId) {
     return new Promise(function (resolve, reject) {
-        const tournamentMatchs = [];
+        const tournamentMatches = [];
         const sheets = google.sheets({ version: "v4", auth });
         sheets.spreadsheets.values.get(
         {
@@ -33,10 +33,10 @@ async function getMatches(auth, spreadsheetId) {
                 for(let i = 2; i < rows.length; index++){
                     const match = rows[i];
                     const matchdata = objects.tournamentMatch(match[0],match[1],match[2],match[3],match[4],match[5], match[6], match[7], match[8], match[9], match[10])
-                    tournamentMatchs.push(matchdata)
+                    tournamentMatches.push(matchdata)
                 }
             }
-            resolve(tournamentMatchs)
+            resolve(tournamentMatches)
         }
         );
     }).catch(function (ex) {

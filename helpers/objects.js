@@ -1,18 +1,16 @@
 const fs = require("fs"); //file interaction
-
-function savePlayerList(playerData){
-    fs.writeFileSync(
-        "Storage/playerData2.json",
-        JSON.stringify(playerData),
-        (err) => {
-          if (err) console.error(err);
-        }
-      ); 
-}
-
 class PlayerList {    
     constructor(){
-        this.playerData = JSON.parse(fs.readFileSync("Storage/playerData2.json", "utf8"));
+        try{
+            this.playerData = JSON.parse(fs.readFileSync("Storage/playerData2.json", "utf8"));
+        } catch(err){
+            if(err.message === "Unexpected end of JSON input"){
+                this.playerData = {};
+                this.saveList();
+            } else {
+                throw err;
+            }
+        }
     }
 
     addNewPlayer(message){
@@ -21,40 +19,123 @@ class PlayerList {
         this.playerData[message.author.id].lastDaily = "Not Collected";
         this.playerData[message.author.id].username = message.author.username;
       
-        savePlayerList(this.playerData)
+        this.saveList();
     }
 
     addPlayerProfile(messageauthorid, clashname, profile){
         this.playerData[messageauthorid].clashname = clashname;
         this.playerData[messageauthorid].profile = profile;
 
-        savePlayerList(this.playerData)
+        this.saveList();
     }
 
     getplayer(messageauthorid){
-        if(!this.playerData[messageauthorid]) return false
-        return new Player(messageauthorid,this.playerData[messageauthorid].username,this.playerData[messageauthorid].clashname,this.playerData[messageauthorid].profile,this.playerData[messageauthorid].money,this.playerData[messageauthorid].lastDaily)
+        if(!this.playerData[messageauthorid]) return false;
+        return new Player(messageauthorid,this.playerData[messageauthorid].username,this.playerData[messageauthorid].clashname,this.playerData[messageauthorid].profile,this.playerData[messageauthorid].money,this.playerData[messageauthorid].lastDaily);
     }
 
     saveList() {
-        savePlayerList(this.playerData)
+        fs.writeFileSync(
+            "Storage/playerData2.json",
+            JSON.stringify(this.playerData),
+            (err) => {
+              if (err) console.error(err);
+            }
+          ); 
+
+        this.updatePlayerList();
     }
+
+    updatePlayerList() {
+        this.playerData = JSON.parse(fs.readFileSync("Storage/playerData2.json", "utf8"));
+    }
+
 }
 
 class Player {
     constructor(discordID, username, clashName, profile, money, lastDaily) {
-        this.discordID = discordID
-        this.username = username
-        this.clashName = clashName
-        this.money = 0
-        this.lastDaily = null
-        this.profile = this.profile
+        this.discordID = discordID;
+        this.username = username;
+        this.clashName = clashName;
+        this.money = money;
+        this.lastDaily = lastDaily;
+        this.profile = profile;
     }
+}
+
+class Guild {
+    constructor(guildId, seasonnumber, tournamentweek, signupopen, prefix, adminrole, notify, notifyrole, rename, resultschannel, testchannel, spreadsheetid, spreadsheetlink) {
+        this.guildId = guildId;
+        this.seasonnumber = seasonnumber;
+        this.tournamentweek = tournamentweek;
+        this.signupopen = signupopen;
+        this.prefix = prefix;
+        this.adminrole = adminrole;
+        this.notify = notify;
+        this.notifyrole = notifyrole;
+        this.rename = rename;
+        this.resultschannel = resultschannel;
+        this.testchannel = testchannel;
+        this.spreadsheetid = spreadsheetid;
+        this.spreadsheetlink = spreadsheetlink;
+    }
+}
+
+class GuildData {    
+    constructor(){
+        this.guildData = JSON.parse(fs.readFileSync("Storage/data2.json", "utf8"));
+    }
+
+    addNewGuildData(guildId) {
+        this.guildData[guildId] = {};
+        this.guildData[guildId].seasonnumber = 0;
+        this.guildData[guildId].tournamentweek = 0;
+        this.guildData[guildId].signupopen = false;
+        this.guildData[guildId].prefix = process.env.prefix;
+        this.guildData[guildId].adminrole = "";
+        this.guildData[guildId].notify = false;
+        this.guildData[guildId].notifyrole = "";
+        this.guildData[guildId].rename = false;
+        this.guildData[guildId].resultschannel = "";
+        this.guildData[guildId].testchannel = "";
+        this.guildData[guildId].spreadsheetid = ""; //needs a command. Access to spreadsheet info
+        this.guildData[guildId].spreadsheetlink = "";
+
+        this.saveGuildData();
+    }
+
+    getGuildData(guildId){
+        if(!this.guildData[guildId]) return false;
+        return new Guild(this.guildData[guildId].seasonnumber, this.guildData[guildId].tournamentweek, this.guildData[guildId].signupopen, this.guildData[guildId].prefix, this.guildData[guildId].adminrole, this.guildData[guildId].notify, this.guildData[guildId].notifyrole, this.guildData[guildId].rename, this.guildData[guildId].resultschannel, this.guildData[guildId].testchannel, this.guildData[guildId].spreadsheetid, this.guildData[guildId].spreadsheetlink);
+    }
+
+    getGuildPrefix(guildId){
+        return this.guildData[guildId].prefix;
+    }
+
+    saveGuildData() {
+        fs.writeFileSync(
+            "Storage/Data2.json",
+            JSON.stringify(this.playerData),
+            (err) => {
+              if (err) console.error(err);
+            }
+          ); 
+
+        this.updateGuildData();
+    }
+
+    updateGuildData() {
+        this.playerData = JSON.parse(fs.readFileSync("Storage/Data2.json", "utf8"));
+    }
+
 }
 
 module.exports = {
     PlayerList,
     Player,
+    GuildData,
+    Guild,
     createMatchResults: function(player1, player2, winner, player1crowns, player2crowns) {
         return {
             player1,

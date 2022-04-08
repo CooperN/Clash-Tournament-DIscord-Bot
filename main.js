@@ -29,23 +29,25 @@ client.once("ready", () => {
 
 //let playerData = JSON.parse(fs.readFileSync("Storage/playerData.json", "utf8"));
 let playerData = new objects.PlayerList;
-let data = JSON.parse(fs.readFileSync("Storage/data.json", "utf8"));
+//let data = JSON.parse(fs.readFileSync("Storage/data.json", "utf8"));
+let data = new objects.GuildData;
 
 client.on("message", async (message) => {
 
-  if (!data[message.guild]) {
-    createguild.execute(client, message, args, data);
-    data = JSON.parse(fs.readFileSync("Storage/data.json", "utf8"));
+  if (!data.getGuildData(message.guild)) {
+    data.addNewGuildData(message.guild);
+    // data = JSON.parse(fs.readFileSync("Storage/data.json", "utf8"));
   }
   
-  if (!message.content.startsWith(data[message.guild].prefix) || message.author.bot) return;
+  if (!message.content.startsWith(data.getGuildPrefix(message.guild)) || message.author.bot) return;
 
-  const args = message.content.slice(data[message.guild].prefix.length).trim().split(/ +/);
+  const args = message.content.slice(data.getGuildPrefix(message.guild).length).trim().split(/ +/);
   const commandName = args.shift().toLowerCase();
 
   //playerData = JSON.parse(fs.readFileSync("Storage/playerData.json", "utf8"));
-  playerData = new objects.PlayerList;
-  data = JSON.parse(fs.readFileSync("Storage/data.json", "utf8"));
+  playerData.updatePlayerList();
+  // data = JSON.parse(fs.readFileSync("Storage/data.json", "utf8"));
+  data.updateGuildData();
 
   if (!playerData.getplayer(message.author.id)) {
     playerData.addNewPlayer(message);
@@ -62,7 +64,7 @@ client.on("message", async (message) => {
     let reply = (`You didn't provide any arguments, ${message.author}!`);
 
     if (command.usage) {
-      reply += `\nTheproper usage would be: \`${data[message.guild].prefix}${command.name} ${command.usage}\``;
+      reply += `\nTheproper usage would be: \`${data.getGuildPrefix(message.guild)}${command.name} ${command.usage}\``;
     }
 
     return message.channel.send(reply);
@@ -72,7 +74,7 @@ client.on("message", async (message) => {
     return message.reply('I can\'t execute that command inside DMs!');
   }
 
-  if (command.admin && !message.member.roles.cache.has(data[message.guild].adminrole)) {
+  if (command.admin && !message.member.roles.cache.has(data.getGuildData(message.guild).adminrole)) {
     return message.reply('This command can only be run by an admin');
   }
 

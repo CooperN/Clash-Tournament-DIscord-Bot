@@ -1,4 +1,5 @@
 const updateleaderboard = require("../updateleaderboard");
+const helpfunctions = require("../helpers/functions");
 
   module.exports = {
     name: 'updateleaderboard',
@@ -13,7 +14,8 @@ const updateleaderboard = require("../updateleaderboard");
         updateleaderboard.updateleaderboard(function (err, result) {
           // *always* check for err
           if (err){
-            console.log ('error', err.message, err.stack);
+            let fullerror = ('error', err.message, err.stack);
+            helpfunctions.log(fullerror, client);
             message.reply(err.message);
           } else {
             console.log ('result', result);

@@ -8,14 +8,13 @@ var Promise = require('promise');
 module.exports = {
     getTournamentMatches: async function(spreadsheetId){
         return new Promise(function (resolve, reject) {
-            if (spreadsheetId == null) reject("Error. No spreadsheet ID")
-        const test = googlefunctions.getcredentials(getMatches, spreadsheetId)
+            if (spreadsheetId == null) reject("Error. No spreadsheet ID");
         resolve(googlefunctions.getcredentials(getMatches, spreadsheetId));
         }).catch(function (ex) {
             reject();
         });
     }
-}
+};
 
 async function getMatches(auth, spreadsheetId) {
     return new Promise(function (resolve, reject) {
@@ -32,11 +31,11 @@ async function getMatches(auth, spreadsheetId) {
             if (rows) {
                 for(let i = 2; i < rows.length; index++){
                     const match = rows[i];
-                    const matchdata = objects.tournamentMatch(match[0],match[1],match[2],match[3],match[4],match[5], match[6], match[7], match[8], match[9], match[10])
-                    tournamentMatches.push(matchdata)
+                    const matchdata = objects.tournamentMatch(match[0],match[1],match[2],match[3],match[4],match[5], match[6], match[7], match[8], match[9], match[10]);
+                    tournamentMatches.push(matchdata);
                 }
             }
-            resolve(tournamentMatches)
+            resolve(tournamentMatches);
         }
         );
     }).catch(function (ex) {

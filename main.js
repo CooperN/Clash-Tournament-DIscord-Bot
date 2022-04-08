@@ -2,12 +2,9 @@
 //devbot link https://discordapp.com/oauth2/authorize?client_id=772467500754927617&scope=bot&permissions=2146958847
 const discord = require("discord.js"); //discord commands
 const fs = require("fs"); //file interaction
-const createguild = require("./initialguilddata");
 const client = new discord.Client();
 const cooldowns = new discord.Collection();
 const objects = require("./helpers/objects");
-const { electronMassDependencies } = require("mathjs/lib/entry/dependenciesAny.generated");
-
 
 
 require("dotenv-flow").config();
@@ -32,24 +29,26 @@ let playerData = new objects.PlayerList;
 let data = new objects.GuildData;
 
 client.on("message", async (message) => {
-
+  //add guild data structure to the guilddata if it doesn't exist
   if (!data.getGuildData(message.guild)) {
     data.addNewGuildData(message.guild);
   }
   
-  if (process.env.discordtoken){
-    message.content.startsWith(data.getGuildPrefix(message.guild))
+  //filter messages from bots or if they don't have the prefix
+  if (process.env.testing){
+    if (message.content.startsWith(process.env.testprefix) || message.author.bot) return;
   }
-  if (!message.content.startsWith(data.getGuildPrefix(message.guild)) || message.author.bot){
+  else if (!message.content.startsWith(data.getGuildPrefix(message.guild)) || message.author.bot) return;
 
-  }
-
+  //split the message into the command and the arguments
   const args = message.content.slice(data.getGuildPrefix(message.guild).length).trim().split(/ +/);
   const commandName = args.shift().toLowerCase();
 
+  //update data from files
   playerData.updatePlayerList();
   data.updateGuildData();
 
+  //add new playerdata if it doesn't exist
   if (!playerData.getplayer(message.author.id)) {
     playerData.addNewPlayer(message);
   }

@@ -1,6 +1,6 @@
 const { google } = require("googleapis");
 const googlefunctions = require("../googlefunctions");
-const objects = require("../helpers/objects");
+const objects = require("./player");
 var Promise = require('promise');
 
 

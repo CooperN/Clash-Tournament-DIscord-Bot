@@ -4,7 +4,7 @@ const { google } = require("googleapis");
 const updateleaderboard = require("../updateleaderboard");
 const googlefunctions = require("./../googlefunctions");
 
-const checkClashProfile = require("../helpers/checkClashProfile");    
+const {checkClashProfile} = require("../helpers/functions");    
 
 var biggerscopemessage = new Object;
 var spreadsheetId = null;

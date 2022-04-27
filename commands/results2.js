@@ -4,7 +4,7 @@ const { google } = require("googleapis");
 const updateleaderboard = require("../updateleaderboard");
 const googlefunctions = require("../googlefunctions");
 
-const checkClashProfile = require("../helpers/checkClashProfile");    
+const functions = require("../helpers/functions");    
 const results = require("./results");
 
 module.exports = {
@@ -15,7 +15,7 @@ module.exports = {
   cooldown: 5,
   execute(client, message, args, playerData, data){
 
-    if(!checkClashProfile.checkClashProfile(playerData[message.author.id].profile, message.channel)) return;  
+    if(!functions.checkClashProfile(playerData[message.author.id].profile, message.channel)) return;  
 
     apiurl = "https://api.clashroyale.com/v1/players/%23" + playerData[message.author.id].profile + "/battlelog";
 

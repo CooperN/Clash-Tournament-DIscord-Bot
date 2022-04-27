@@ -1,0 +1,24 @@
+add notify
+addp
+balance
+closesignup
+createtourney
+daily
+ding
+games
+gamesleft
+help
+join
+leaderboard
+opensignup
+ping
+players
+profile
+renameplayers
+results
+say
+setweek
+speadsheet
+stopnotify
+
+Update player

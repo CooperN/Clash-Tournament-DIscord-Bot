@@ -4,11 +4,11 @@ const discord = require("discord.js"); //discord commands
 const fs = require("fs"); //file interaction
 const client = new discord.Client();
 const cooldowns = new discord.Collection();
-const objects = require("./helpers/objects");
-
+const {Player, playerlistupdate} = require("./helpers/player");
+const {Guild, guildDataUpdate} = require("./helpers/guild");
+const {saveClient} = require("./helpers/functions");
 
 require("dotenv-flow").config();
-
 
 client.commands = new discord.Collection();
 
@@ -20,38 +20,36 @@ for(const file of commandFiles){
   client.commands.set(command.name, command);
 }
 
+saveClient(client);
+
 client.once("ready", () => {
   console.log("Clash Royale Bot is online!");
   console.log(`Logged in as ${client.user.tag}!`);
 });
 
-let playerData = new objects.PlayerList;
-let data = new objects.GuildData;
+client.on("message", async (message) => {  
 
-client.on("message", async (message) => {
-  //add guild data structure to the guilddata if it doesn't exist
-  if (!data.getGuildData(message.guild)) {
-    data.addNewGuildData(message.guild);
-  }
-  
-  //filter messages from bots or if they don't have the prefix
+  if (message.author.bot) return;
+  let currentGuild = new Guild(message);
+
+  //filter if they don't have the prefix
   if (process.env.testing){
-    if (message.content.startsWith(process.env.testprefix) || message.author.bot) return;
+    if (!message.content.startsWith(process.env.testprefix)) return;
   }
-  else if (!message.content.startsWith(data.getGuildPrefix(message.guild)) || message.author.bot) return;
+  else if (!message.content.startsWith(currentGuild.getGuildPrefix())) return;
 
+
+
+  let args = [];
   //split the message into the command and the arguments
-  const args = message.content.slice(data.getGuildPrefix(message.guild).length).trim().split(/ +/);
-  const commandName = args.shift().toLowerCase();
-
-  //update data from files
-  playerData.updatePlayerList();
-  data.updateGuildData();
-
-  //add new playerdata if it doesn't exist
-  if (!playerData.getplayer(message.author.id)) {
-    playerData.addNewPlayer(message);
+  if (process.env.testing){
+    args = message.content.slice(process.env.testprefix.length).split(/ +/);
   }
+  else {
+    args = message.content.slice(currentGuild.getGuildPrefix().length).trim().split(/ +/);
+  }
+
+  const commandName = args.shift().toLowerCase();
 
   const command = client.commands.get(commandName)
       || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
@@ -62,7 +60,7 @@ client.on("message", async (message) => {
     let reply = (`You didn't provide any arguments, ${message.author}!`);
 
     if (command.usage) {
-      reply += `\nTheproper usage would be: \`${data.getGuildPrefix(message.guild)}${command.name} ${command.usage}\``;
+      reply += `\nTheproper usage would be: \`${currentGuild.getGuildPrefix()}${command.name} ${command.usage}\``;
     }
 
     return message.channel.send(reply);
@@ -72,7 +70,7 @@ client.on("message", async (message) => {
     return message.reply('I can\'t execute that command inside DMs!');
   }
 
-  if (command.admin && !message.member.roles.cache.has(data.getGuildData(message.guild).adminrole)) {
+  if (command.admin && !message.member.roles.cache.has(currentGuild.getAdminRole())) {
     return message.reply('This command can only be run by an admin');
   }
 
@@ -97,7 +95,7 @@ client.on("message", async (message) => {
   setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
 
   try {
-    command.execute(client, message, args, playerData, data);
+    command.execute(client, message, args);
   } catch (error) {
     console.error(error);
     message.reply('there was an error trying to execute that command!');

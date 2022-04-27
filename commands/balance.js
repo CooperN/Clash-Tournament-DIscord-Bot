@@ -1,5 +1,3 @@
-const objects = require("../helpers/objects")
-
 module.exports = {
   name: 'balance',
   description: 'sends player bank account balance',
